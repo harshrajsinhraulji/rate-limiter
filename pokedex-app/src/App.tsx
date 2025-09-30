@@ -1,8 +1,8 @@
-
 import { useEffect, useState } from 'react';
 import { getPokemonList, Pokemon } from './services/pokemon';
 import PokemonCard from './components/pokemon/PokemonCard';
 import Header from './components/layout/Header';
+import Footer from './components/layout/Footer';
 import './App.css';
 
 function App() {
@@ -28,13 +28,16 @@ function App() {
   return (
     <div>
       <Header />
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
-      <div className="pokemon-grid">
-        {pokemonList.map((pokemon) => (
-          <PokemonCard key={pokemon.name} name={pokemon.name} url={pokemon.url} />
-        ))}
-      </div>
+      <main>
+        {loading && <p>Loading...</p>}
+        {error && <p>{error}</p>}
+        <div className="pokemon-grid">
+          {pokemonList.map((pokemon) => (
+            <PokemonCard key={pokemon.name} name={pokemon.name} url={pokemon.url} />
+          ))}
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 }
