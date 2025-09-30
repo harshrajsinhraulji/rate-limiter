@@ -1,3 +1,4 @@
+import { POKEAPI_BASE_URL } from "../constants";
 
 export interface Pokemon {
   name: string;
@@ -24,7 +25,7 @@ export interface PokemonDetails {
 }
 
 export async function getPokemonList(): Promise<PokemonListResponse> {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+  const response = await fetch(`${POKEAPI_BASE_URL}/pokemon?limit=151`);
   if (!response.ok) {
     throw new Error("Failed to fetch pokemon list");
   }
