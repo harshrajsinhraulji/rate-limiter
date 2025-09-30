@@ -1,3 +1,4 @@
+
 export interface Pokemon {
   name: string;
   url: string;
@@ -15,6 +16,11 @@ export interface PokemonDetails {
   sprites: {
     front_default: string;
   };
+  types: {
+    type: {
+      name: string;
+    };
+  }[];
 }
 
 export async function getPokemonList(): Promise<PokemonListResponse> {
