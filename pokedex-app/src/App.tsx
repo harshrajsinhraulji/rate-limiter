@@ -1,6 +1,7 @@
-
 import { useEffect, useState } from 'react';
 import { getPokemonList, Pokemon } from './services/pokemon';
+import PokemonCard from './components/pokemon/PokemonCard';
+import './App.css';
 
 function App() {
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
@@ -27,11 +28,11 @@ function App() {
       <h1>Pokedex</h1>
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
-      <ul>
+      <div className="pokemon-grid">
         {pokemonList.map((pokemon) => (
-          <li key={pokemon.name}>{pokemon.name}</li>
+          <PokemonCard key={pokemon.name} name={pokemon.name} url={pokemon.url} />
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
