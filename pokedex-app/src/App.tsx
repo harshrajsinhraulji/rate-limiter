@@ -1,6 +1,8 @@
+
 import { useEffect, useState } from 'react';
 import { getPokemonList, Pokemon } from './services/pokemon';
 import PokemonCard from './components/pokemon/PokemonCard';
+import Header from './components/layout/Header';
 import './App.css';
 
 function App() {
@@ -25,7 +27,7 @@ function App() {
 
   return (
     <div>
-      <h1>Pokedex</h1>
+      <Header />
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       <div className="pokemon-grid">
