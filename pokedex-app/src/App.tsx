@@ -1,8 +1,9 @@
+
 import { useEffect, useState } from 'react';
 import { getPokemonList, Pokemon } from './services/pokemon';
-import PokemonCard from './components/pokemon/PokemonCard';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
+import PokemonGrid from './components/pokemon/PokemonGrid';
 import './App.css';
 
 function App() {
@@ -31,11 +32,7 @@ function App() {
       <main>
         {loading && <p>Loading...</p>}
         {error && <p>{error}</p>}
-        <div className="pokemon-grid">
-          {pokemonList.map((pokemon) => (
-            <PokemonCard key={pokemon.name} name={pokemon.name} url={pokemon.url} />
-          ))}
-        </div>
+        <PokemonGrid pokemonList={pokemonList} />
       </main>
       <Footer />
     </div>
