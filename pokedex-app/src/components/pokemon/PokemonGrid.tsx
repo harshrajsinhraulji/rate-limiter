@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Pokemon } from '../../services/pokemon';
+import { Pokemon } from '../../types/pokemon.d';
 import PokemonCard from './PokemonCard';
 
 interface PokemonGridProps {
@@ -11,7 +10,7 @@ const PokemonGrid: React.FC<PokemonGridProps> = ({ pokemonList }) => {
   return (
     <div className="pokemon-grid">
       {pokemonList.map((pokemon) => (
-        <PokemonCard key={pokemon.name} name={pokemon.name} url={pokemon.url} />
+        <PokemonCard key={pokemon.id} pokemon={pokemon} />
       ))}
     </div>
   );
