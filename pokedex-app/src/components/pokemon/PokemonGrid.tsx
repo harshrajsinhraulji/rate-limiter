@@ -1,4 +1,5 @@
 import React from 'react';
+import './PokemonGrid.css';
 import { Pokemon } from '../../types/pokemon.d';
 import PokemonCard from './PokemonCard';
 
