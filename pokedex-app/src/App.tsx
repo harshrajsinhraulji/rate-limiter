@@ -11,6 +11,7 @@ function App() {
     <div>
       <Header />
       <main>
+        <h1>Pokedex</h1>
         {loading && <p>Loading...</p>}
         {error && <p>{error}</p>}
         {!loading && !error && <PokemonGrid pokemonList={pokemonList} />}
