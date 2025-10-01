@@ -6,3 +6,8 @@
   font-size: 1.2rem;
   color: #888;
 }
+
+.pokemon-card .placeholder {
+  min-height: 96px; /* Corresponds to the image height */
+  background-color: #eee;
+}

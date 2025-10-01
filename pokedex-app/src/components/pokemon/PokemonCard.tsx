@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pokemon } from '../../types/pokemon.d';
 import './PokemonCard.css';
 
@@ -8,6 +8,8 @@ interface PokemonCardProps {
 }
 
 const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon, loading }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   if (loading || !pokemon) {
     return (
       <div className="pokemon-card">
@@ -18,7 +20,13 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon, loading }) => {
 
   return (
     <div className="pokemon-card">
-      <img src={pokemon.sprites.front_default} alt={pokemon.name} />
+      {!imageLoaded && <div className="placeholder" />}
+      <img
+        src={pokemon.sprites.front_default}
+        alt={pokemon.name}
+        onLoad={() => setImageLoaded(true)}
+        style={{ display: imageLoaded ? 'block' : 'none' }}
+      />
       <p>{pokemon.name}</p>
       <div>
         {pokemon.types.map((typeInfo) => (
