@@ -3,10 +3,19 @@ import { Pokemon } from '../../types/pokemon.d';
 import './PokemonCard.css';
 
 interface PokemonCardProps {
-  pokemon: Pokemon;
+  pokemon?: Pokemon;
+  loading?: boolean;
 }
 
-const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
+const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon, loading }) => {
+  if (loading || !pokemon) {
+    return (
+      <div className="pokemon-card">
+        <div className="loading">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="pokemon-card">
       <img src={pokemon.sprites.front_default} alt={pokemon.name} />
