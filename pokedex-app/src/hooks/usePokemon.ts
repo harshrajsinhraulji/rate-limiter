@@ -30,12 +30,13 @@ export const usePokemon = (): UsePokemonListResult => {
         const pokemonPromises = results.map(async (pokemon: { name: string }) => {
           const pokemonResponse = await fetch(`${POKEMON_API_BASE_URL}/${pokemon.name}`);
           if (!pokemonResponse.ok) {
-            throw new Error(`Failed to fetch Pokemon: ${pokemon.name}`);
+            console.error(`Failed to fetch Pokemon: ${pokemon.name}`);
+            return null;
           }
           return await pokemonResponse.json();
         });
 
-        const pokemonData = await Promise.all(pokemonPromises);
+        const pokemonData = (await Promise.all(pokemonPromises)).filter(p => p !== null) as Pokemon[];
         setPokemonList(pokemonData);
       } catch (err) {
         if (err instanceof Error) {
