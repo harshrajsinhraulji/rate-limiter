@@ -36,3 +36,6 @@ build/
 *.class
 *.jar
 .idea/
+
+.env
+.env.local

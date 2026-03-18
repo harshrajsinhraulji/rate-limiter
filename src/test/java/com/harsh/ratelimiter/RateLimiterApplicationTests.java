@@ -1,4 +1,4 @@
-package com.harsh.rate_limiter;
+package com.harsh.ratelimiter;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
