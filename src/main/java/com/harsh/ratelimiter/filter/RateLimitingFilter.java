@@ -8,36 +8,59 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class RateLimitingFilter extends OncePerRequestFilter {
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    // Max requests allowed per window
+    private static final int MAX_REQUESTS = 3;
 
-        // Extract API key from request header, This identifies the client making the request
+    // Time window (10 seconds)
+    private static final long WINDOW_SIZE = 10_000;
+
+    // API key → request timestamps
+    private final Map<String, List<Long>> requestStore = new ConcurrentHashMap<>();
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
+
+        // Extract API key from header
         String apiKey = request.getHeader("X-API-KEY");
 
-        // Check if API key is missing or empty
-        // If true, we cannot track or limit this user
+        // Reject if missing
         if (apiKey == null || apiKey.isEmpty()) {
-
-            // Set HTTP status to 400 (Bad Request)
-            // This tells client that request is invalid
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-
-            // Write error message in response body
             response.getWriter().write("Missing API Key");
-
-            // VERY IMPORTANT:
-            // Stop further execution so request does NOT reach controller
             return;
         }
 
-        // If API key is valid → allow request to proceed
-        // This passes request to next filter / controller
+        long currentTime = System.currentTimeMillis();
+
+        // Get or create timestamp list (thread-safe)
+        List<Long> timestamps = requestStore.computeIfAbsent(
+                apiKey,
+                k -> Collections.synchronizedList(new ArrayList<>())
+        );
+
+        // Remove expired timestamps
+        timestamps.removeIf(ts -> (currentTime - ts) > WINDOW_SIZE);
+
+        // Check rate limit
+        if (timestamps.size() >= MAX_REQUESTS) {
+            response.setStatus(429); // Too Many Requests
+            response.getWriter().write("Rate Limit Exceeded");
+            return;
+        }
+
+        // Record current request
+        timestamps.add(currentTime);
+
+        // Continue request
         filterChain.doFilter(request, response);
     }
-
-
 }
