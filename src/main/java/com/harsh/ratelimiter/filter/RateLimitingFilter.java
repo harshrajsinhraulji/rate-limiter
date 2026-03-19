@@ -47,14 +47,20 @@ public class RateLimitingFilter extends OncePerRequestFilter {
                 k -> Collections.synchronizedList(new ArrayList<>())
         );
 
-        // Remove expired timestamps
-        timestamps.removeIf(ts -> (currentTime - ts) > WINDOW_SIZE);
+        synchronized (timestamps) {
 
-        // Check rate limit
-        if (timestamps.size() >= MAX_REQUESTS) {
-            response.setStatus(429); // Too Many Requests
-            response.getWriter().write("Rate Limit Exceeded");
-            return;
+            // Remove expired timestamps
+            timestamps.removeIf(ts -> (currentTime - ts) > WINDOW_SIZE);
+
+            // Check limit
+            if (timestamps.size() >= MAX_REQUESTS) {
+                response.setStatus(429);
+                response.getWriter().write("Rate Limit Exceeded");
+                return;
+            }
+
+            // Add current request
+            timestamps.add(currentTime);
         }
 
         // Record current request
